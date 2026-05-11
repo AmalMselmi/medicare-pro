@@ -16,7 +16,7 @@ export class PatientDetailComponent implements OnInit {
   patient: Patient | null = null;
   rdvs: any[] = [];
   loading = true;
-  apiUrl = 'http://localhost:5000';
+  apiUrl = 'http://localhost:5001';
 
   constructor(private route: ActivatedRoute, private patientService: PatientService) {}
 

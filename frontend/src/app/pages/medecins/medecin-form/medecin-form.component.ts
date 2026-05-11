@@ -19,7 +19,7 @@ export class MedecinFormComponent implements OnInit {
   loading = false;
   selectedPhoto: File | null = null;
   photoPreview: string | null = null;
-  apiUrl = 'http://localhost:5000';
+  apiUrl = 'http://localhost:5001';
 
   specialites = ['Généraliste','Cardiologue','Dermatologue','Pédiatre','Gynécologue','Orthopédiste','Ophtalmologue','ORL','Neurologue','Psychiatre','Radiologue','Autre'];
 

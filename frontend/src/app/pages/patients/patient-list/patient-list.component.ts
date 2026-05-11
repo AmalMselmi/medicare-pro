@@ -18,7 +18,7 @@ export class PatientListComponent implements OnInit {
   filtered: Patient[] = [];
   search = '';
   loading = true;
-  apiUrl = 'http://localhost:5000';
+  apiUrl = 'http://localhost:5001';
 
   constructor(private patientService: PatientService) {}
 

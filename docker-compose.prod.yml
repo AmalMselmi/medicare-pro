@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: medicare_mongodb_prod
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: medical_db
+    volumes:
+      - mongodb_prod_data:/data/db
+    networks:
+      - medicare_prod_network
+
+  backend:
+    image: ${DOCKER_USERNAME}/medicare-backend:latest
+    container_name: medicare_backend_prod
+    restart: always
+    environment:
+      PORT: 5000
+      MONGO_URI: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/medical_db?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      NODE_ENV: production
+    volumes:
+      - uploads_prod:/app/uploads
+    depends_on:
+      - mongodb
+    networks:
+      - medicare_prod_network
+
+  frontend:
+    image: ${DOCKER_USERNAME}/medicare-frontend:latest
+    container_name: medicare_frontend_prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - medicare_prod_network
+
+volumes:
+  mongodb_prod_data:
+  uploads_prod:
+
+networks:
+  medicare_prod_network:
+    driver: bridge

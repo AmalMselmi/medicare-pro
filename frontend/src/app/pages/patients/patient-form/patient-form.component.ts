@@ -19,7 +19,7 @@ export class PatientFormComponent implements OnInit {
   loading = false;
   selectedPhoto: File | null = null;
   photoPreview: string | null = null;
-  apiUrl = 'http://localhost:5000';
+  apiUrl = 'http://localhost:5001';
 
   constructor(
     private fb: FormBuilder,
