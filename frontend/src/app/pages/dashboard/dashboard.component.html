@@ -1,0 +1,103 @@
+<div class="dashboard fade-in">
+  <div class="welcome-banner">
+    <div class="welcome-text">
+      <h1>Bonjour, {{ user?.nom }} </h1>
+      <p>Bienvenue sur votre tableau de bord médical</p>
+    </div>
+    <div class="welcome-actions">
+      <a routerLink="/rendezvous/new" class="btn btn-primary"> Nouveau RDV</a>
+      <a routerLink="/patients/new" class="btn btn-outline"> Nouveau Patient</a>
+    </div>
+  </div>
+
+  <div class="stats-grid" *ngIf="!loading">
+    <div class="stat-card stat-blue">
+      <div class="stat-icon"></div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.rdvAujourdhui || 0 }}</div>
+        <div class="stat-label">RDV Aujourd'hui</div>
+      </div>
+    </div>
+    <div class="stat-card stat-green">
+      <div class="stat-icon"></div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.totalPatients || 0 }}</div>
+        <div class="stat-label">Total Patients</div>
+      </div>
+    </div>
+    <div class="stat-card stat-purple">
+      <div class="stat-icon"></div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.totalRDV || 0 }}</div>
+        <div class="stat-label">Total Rendez-vous</div>
+      </div>
+    </div>
+    <div class="stat-card stat-orange">
+      <div class="stat-icon"></div>
+      <div class="stat-info">
+        <div class="stat-value">{{ stats.totalMedecins || 0 }}</div>
+        <div class="stat-label">Médecins</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="card" style="margin-top: 28px;">
+    <div class="card-header">
+      <h3> Rendez-vous du jour</h3>
+      <a routerLink="/rendezvous" class="btn btn-outline btn-sm">Voir tout</a>
+    </div>
+
+    <div class="table-container" *ngIf="rdvAujourdhui.length > 0; else noRDV">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Médecin</th>
+            <th>Heure</th>
+            <th>Motif</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rdv of rdvAujourdhui">
+            <td>{{ rdv.patient?.prenom }} {{ rdv.patient?.nom }}</td>
+            <td>Dr. {{ rdv.medecin?.prenom }} {{ rdv.medecin?.nom }}</td>
+            <td><span class="time-badge">🕐 {{ rdv.heure }}</span></td>
+            <td>{{ rdv.motif }}</td>
+            <td><span class="badge badge-{{ getStatutClass(rdv.statut) }}">{{ rdv.statut }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #noRDV>
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <p>Aucun rendez-vous prévu aujourd'hui</p>
+        <a routerLink="/rendezvous/new" class="btn btn-primary btn-sm">Planifier un RDV</a>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="quick-links">
+    <a routerLink="/patients" class="quick-card">
+      <span class="quick-icon"></span>
+      <span>Gérer les Patients</span>
+      <span class="arrow">→</span>
+    </a>
+    <a routerLink="/rendezvous" class="quick-card">
+      <span class="quick-icon"></span>
+      <span>Tous les Rendez-vous</span>
+      <span class="arrow">→</span>
+    </a>
+    <a routerLink="/medecins" class="quick-card">
+      <span class="quick-icon"></span>
+      <span>Équipe Médicale</span>
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</div>

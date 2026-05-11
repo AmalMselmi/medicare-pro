@@ -1,0 +1,90 @@
+<div class="patient-list fade-in">
+  <div class="page-header">
+    <div>
+      <h1> Gestion des Patients</h1>
+      <p class="subtitle">{{ filtered.length }} patient(s) enregistré(s)</p>
+    </div>
+    <a routerLink="/patients/new" class="btn btn-primary"> Nouveau Patient</a>
+  </div>
+
+  <div class="search-section card">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        [(ngModel)]="search"
+        (input)="onSearch()"
+        placeholder="Rechercher par nom, prénom ou téléphone..."
+        class="search-input"
+      />
+      <button *ngIf="search" (click)="search=''; loadPatients()" class="clear-btn">✕</button>
+    </div>
+  </div>
+
+  <div class="loading-container" *ngIf="loading"><div class="spinner"></div></div>
+
+  <div class="card" *ngIf="!loading">
+    <div class="table-container" *ngIf="filtered.length > 0; else emptyState">
+      <table>
+        <thead>
+          <tr>
+            <th>Patient</th>
+            <th>Âge / Sexe</th>
+            <th>Téléphone</th>
+            <th>Groupe Sanguin</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let patient of filtered">
+            <td>
+              <div class="patient-info">
+                <div class="avatar-container">
+                  <img *ngIf="patient.photo" [src]="getPhotoUrl(patient.photo)" class="patient-photo" />
+                  <div *ngIf="!patient.photo" class="avatar-initials">{{ getInitials(patient) }}</div>
+                </div>
+                <div>
+                  <div class="patient-name">{{ patient.prenom }} {{ patient.nom }}</div>
+                  <div class="patient-email">{{ patient.email || '—' }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              {{ patient.age }} ans
+              <span class="sex-badge" [class.male]="patient.sexe === 'Homme'" [class.female]="patient.sexe === 'Femme'">
+                {{ patient.sexe === 'Homme' ? '♂' : '♀' }}
+              </span>
+            </td>
+            <td>📞 {{ patient.telephone }}</td>
+            <td>
+              <span class="blood-badge" *ngIf="patient.groupeSanguin">{{ patient.groupeSanguin }}</span>
+              <span *ngIf="!patient.groupeSanguin">—</span>
+            </td>
+            <td>
+              <span class="badge" [class.badge-confirme]="patient.actif" [class.badge-annule]="!patient.actif">
+                {{ patient.actif ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-btns">
+                <a [routerLink]="['/patients', patient._id]" class="btn-action view">👁️</a>
+                <a [routerLink]="['/patients', patient._id, 'edit']" class="btn-action edit">✏️</a>
+                <button (click)="delete(patient)" class="btn-action delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <div class="empty-icon">👤</div>
+        <h3>Aucun patient trouvé</h3>
+        <p>{{ search ? 'Aucun résultat pour "' + search + '"' : 'Commencez par ajouter un patient' }}</p>
+        <a routerLink="/patients/new" class="btn btn-primary"> Ajouter un Patient</a>
+      </div>
+    </ng-template>
+  </div>
+</div>

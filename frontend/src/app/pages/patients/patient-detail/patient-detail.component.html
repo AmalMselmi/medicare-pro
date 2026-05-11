@@ -1,0 +1,135 @@
+<div class="patient-detail fade-in" *ngIf="!loading && patient">
+  <div class="page-header">
+    <div>
+      <h1> Dossier Patient</h1>
+      <p class="subtitle">Informations complètes</p>
+    </div>
+    <div class="header-actions">
+      <a [routerLink]="['/patients', patient._id, 'edit']" class="btn btn-outline"> Modifier</a>
+      <a routerLink="/rendezvous/new" class="btn btn-primary"> Prendre RDV</a>
+      <a routerLink="/patients" class="btn btn-outline">← Retour</a>
+    </div>
+  </div>
+
+  <div class="detail-layout">
+    <!-- Profile Card -->
+    <div class="profile-card card">
+      <div class="profile-photo">
+        <img *ngIf="patient.photo" [src]="getPhotoUrl(patient.photo)" [alt]="patient.nomComplet" />
+        <div *ngIf="!patient.photo" class="avatar-large">
+          {{ patient.prenom?.charAt(0) }}{{ patient.nom?.charAt(0) }}
+        </div>
+      </div>
+
+      <h2 class="patient-name">{{ patient.prenom }} {{ patient.nom }}</h2>
+
+      <div class="patient-meta">
+        <span class="sex-tag"
+              [class.male]="patient.sexe === 'Homme'"
+              [class.female]="patient.sexe === 'Femme'">
+          {{ patient.sexe === 'Homme' ? '♂ Homme' : '♀ Femme' }}
+        </span>
+
+        <span class="age-tag">{{ patient.age }} ans</span>
+      </div>
+
+      <span class="blood-type" *ngIf="patient.groupeSanguin">
+        🩸 {{ patient.groupeSanguin }}
+      </span>
+
+      <div class="contact-info">
+        <div class="contact-item">📞 {{ patient.telephone }}</div>
+        <div class="contact-item" *ngIf="patient.email">📧 {{ patient.email }}</div>
+        <div class="contact-item" *ngIf="patient.adresse">📍 {{ patient.adresse }}</div>
+      </div>
+    </div>
+
+    <!-- Info Column -->
+    <div class="info-column">
+
+      <!-- Medical Info -->
+      <div class="card">
+        <h3>🏥 Informations Médicales</h3>
+
+        <div class="info-grid">
+
+          <div class="info-item">
+            <label>Date de naissance</label>
+            <span>{{ patient.dateNaissance | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <div class="info-item">
+            <label>Groupe sanguin</label>
+            <span>{{ patient.groupeSanguin || 'Non renseigné' }}</span>
+          </div>
+
+          <div class="info-item full">
+            <label>Antécédents médicaux</label>
+            <span>{{ patient.antecedents || 'Aucun antécédent renseigné' }}</span>
+          </div>
+
+          <div class="info-item full">
+            <label>Allergies</label>
+            <span>{{ patient.allergie || 'Aucune allergie connue' }}</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RDV History -->
+      <div class="card">
+        <div class="card-header">
+          <h3>📋 Historique des Rendez-vous ({{ rdvs.length }})</h3>
+        </div>
+
+        <div class="table-container" *ngIf="rdvs.length > 0; else noRdv">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Médecin</th>
+                <th>Motif</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let rdv of rdvs">
+                <td>{{ rdv.date | date:'dd/MM/yyyy' }}</td>
+                <td>{{ rdv.heure }}</td>
+
+                <td>
+                  Dr. {{ rdv.medecin?.prenom }} {{ rdv.medecin?.nom }} <br />
+                  <small style="color:#64748B">{{ rdv.medecin?.specialite }}</small>
+                </td>
+
+                <td>{{ rdv.motif }}</td>
+
+                <td>
+                  <span class="badge badge-{{ getStatutClass(rdv.statut) }}">
+                    {{ rdv.statut }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ng-template #noRdv>
+          <div class="empty-state" style="padding: 30px; text-align:center;">
+            <p style="color:#94A3B8">
+              Aucun rendez-vous enregistré pour ce patient
+            </p>
+          </div>
+        </ng-template>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading-container" *ngIf="loading">
+  <div class="spinner"></div>
+</div>

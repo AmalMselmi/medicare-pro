@@ -1,0 +1,114 @@
+<div class="patient-form-page fade-in">
+  <div class="page-header">
+    <div>
+      <h1>{{ isEdit ? ' Modifier le Patient' : ' Nouveau Patient' }}</h1>
+      <p class="subtitle">{{ isEdit ? 'Mettre à jour les informations du patient' : 'Enregistrer un nouveau patient' }}</p>
+    </div>
+    <a routerLink="/patients" class="btn btn-outline">← Retour</a>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-layout">
+      <!-- Photo Section -->
+      <div class="photo-section card">
+        <h3>Photo du Patient</h3>
+        <div class="photo-upload">
+          <div class="photo-preview">
+            <img *ngIf="photoPreview" [src]="photoPreview" alt="Preview" />
+            <div *ngIf="!photoPreview" class="photo-placeholder">
+              <span>📷</span>
+              <p>Cliquez pour ajouter une photo</p>
+            </div>
+          </div>
+          <input type="file" id="photo" accept="image/*" (change)="onPhotoChange($event)" hidden />
+          <label for="photo" class="btn btn-outline"> Choisir une photo</label>
+          <small>JPG, PNG ou WEBP • Max 5MB</small>
+        </div>
+      </div>
+
+      <!-- Form Fields -->
+      <div class="form-fields card">
+        <h3>Informations Personnelles</h3>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prénom *</label>
+            <input formControlName="prenom" placeholder="Prénom du patient"
+              [class.invalid]="f['prenom'].invalid && f['prenom'].touched" />
+            <div class="error-msg" *ngIf="f['prenom'].invalid && f['prenom'].touched">Prénom requis (min. 2 caractères)</div>
+          </div>
+          <div class="form-group">
+            <label>Nom *</label>
+            <input formControlName="nom" placeholder="Nom de famille"
+              [class.invalid]="f['nom'].invalid && f['nom'].touched" />
+            <div class="error-msg" *ngIf="f['nom'].invalid && f['nom'].touched">Nom requis (min. 2 caractères)</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date de Naissance *</label>
+            <input type="date" formControlName="dateNaissance"
+              [class.invalid]="f['dateNaissance'].invalid && f['dateNaissance'].touched" />
+            <div class="error-msg" *ngIf="f['dateNaissance'].invalid && f['dateNaissance'].touched">Date requise</div>
+          </div>
+          <div class="form-group">
+            <label>Sexe *</label>
+            <select formControlName="sexe" [class.invalid]="f['sexe'].invalid && f['sexe'].touched">
+              <option value="">Sélectionner...</option>
+              <option value="Homme">♂ Homme</option>
+              <option value="Femme">♀ Femme</option>
+            </select>
+            <div class="error-msg" *ngIf="f['sexe'].invalid && f['sexe'].touched">Sexe requis</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input formControlName="telephone" placeholder="12345678"
+              [class.invalid]="f['telephone'].invalid && f['telephone'].touched" />
+            <div class="error-msg" *ngIf="f['telephone'].invalid && f['telephone'].touched">8 chiffres requis</div>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" formControlName="email" placeholder="patient@email.tn"
+              [class.invalid]="f['email'].invalid && f['email'].touched" />
+            <div class="error-msg" *ngIf="f['email'].invalid && f['email'].touched">Email invalide</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Groupe Sanguin</label>
+            <select formControlName="groupeSanguin">
+              <option value="">Inconnu</option>
+              <option *ngFor="let g of ['A+','A-','B+','B-','AB+','AB-','O+','O-']" [value]="g">{{ g }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Adresse</label>
+            <input formControlName="adresse" placeholder="Adresse complète" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Antécédents Médicaux</label>
+          <textarea formControlName="antecedents" rows="3" placeholder="Maladies chroniques, opérations passées..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Allergies</label>
+          <textarea formControlName="allergie" rows="2" placeholder="Allergies connues..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <a routerLink="/patients" class="btn btn-outline">Annuler</a>
+          <button type="submit" class="btn btn-primary" [disabled]="loading">
+            {{ loading ? '⏳ Enregistrement...' : (isEdit ? ' Mettre à jour' : 'Créer le Patient') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

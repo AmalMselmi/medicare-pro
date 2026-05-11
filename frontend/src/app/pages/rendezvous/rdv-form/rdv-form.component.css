@@ -1,0 +1,33 @@
+.form-card { max-width: 900px; }
+
+.form-section {
+  margin-bottom: 32px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid #F1F5F9;
+
+  &:last-of-type { border-bottom: none; }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 20px;
+    padding-left: 12px;
+    border-left: 4px solid #2563EB;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+}
+
+textarea { resize: vertical; }

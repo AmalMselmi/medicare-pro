@@ -1,0 +1,15 @@
+<!-- Si l'utilisateur est connecté → affiche sidebar + navbar + page -->
+<div class="app-layout" *ngIf="isLoggedIn; else loginLayout">
+  <app-sidebar></app-sidebar>        <!-- Menu gauche -->
+  <div class="main-content">
+    <app-navbar></app-navbar>         <!-- Barre du haut -->
+    <div class="page-content">
+      <router-outlet></router-outlet> <!-- Page active (dashboard, patients...) -->
+    </div>
+  </div>
+</div>
+
+<!-- Si NON connecté → affiche juste la page login -->
+<ng-template #loginLayout>
+  <router-outlet></router-outlet>
+</ng-template>

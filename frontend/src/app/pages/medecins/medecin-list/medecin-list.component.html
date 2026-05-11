@@ -1,0 +1,57 @@
+<div class="medecin-list fade-in">
+  <div class="page-header">
+    <div>
+      <h1> Équipe Médicale</h1>
+      <p class="subtitle">{{ medecins.length }} médecin(s) enregistré(s)</p>
+    </div>
+    <a routerLink="/medecins/new" class="btn btn-primary"> Nouveau Médecin</a>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar card">
+    <label>Filtrer par spécialité :</label>
+    <select [(ngModel)]="specialiteFilter" (change)="onFilter()">
+      <option value="">Toutes les spécialités</option>
+      <option *ngFor="let s of specialites" [value]="s">{{ s }}</option>
+    </select>
+  </div>
+
+  <div class="loading-container" *ngIf="loading"><div class="spinner"></div></div>
+
+  <!-- Cards Grid -->
+  <div class="medecins-grid" *ngIf="!loading">
+    <div class="medecin-card card" *ngFor="let m of medecins">
+      <div class="medecin-header">
+        <div class="medecin-avatar">
+          <img *ngIf="m.photo" [src]="getPhotoUrl(m.photo)" [alt]="m.nomComplet" />
+          <div *ngIf="!m.photo" class="avatar-initials">{{ getInitials(m) }}</div>
+        </div>
+        <div class="disponible-badge" [class.available]="m.disponible" [class.unavailable]="!m.disponible">
+          {{ m.disponible ? ' Disponible' : ' Indisponible' }}
+        </div>
+      </div>
+
+      <div class="medecin-info">
+        <h3>Dr. {{ m.prenom }} {{ m.nom }}</h3>
+        <span class="specialite-tag">{{ m.specialite }}</span>
+        <div class="contact-list">
+          <div>📞 {{ m.telephone }}</div>
+          <div *ngIf="m.email">📧 {{ m.email }}</div>
+          <div *ngIf="m.horaires">🕐 {{ m.horaires?.debut }} – {{ m.horaires?.fin }}</div>
+        </div>
+      </div>
+
+      <div class="medecin-actions">
+        <a [routerLink]="['/medecins', m._id, 'edit']" class="btn btn-outline btn-sm">Modifier</a>
+        <button (click)="delete(m)" class="btn btn-danger btn-sm"> Supprimer</button>
+      </div>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="medecins.length === 0">
+      <div class="empty-icon">👨‍⚕️</div>
+      <h3>Aucun médecin trouvé</h3>
+      <a routerLink="/medecins/new" class="btn btn-primary">➕ Ajouter un Médecin</a>
+    </div>
+  </div>
+</div>

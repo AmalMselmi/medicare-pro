@@ -1,0 +1,62 @@
+<div class="login-page">
+  <div class="login-left">
+    <div class="hero-content">
+      <div class="hospital-icon">🏥</div>
+      <h1>MediCare Pro</h1>
+      <p>Système de gestion médicale pour les professionnels de santé</p>
+      <div class="features">
+        <div class="feature"><span></span> Gestion des patients</div>
+        <div class="feature"><span></span> Planification des rendez-vous</div>
+        <div class="feature"><span></span> Suivi médical complet</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo"></div>
+        <h2>Connexion</h2>
+        <p>Accédez à votre espace professionnel</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Adresse email</label>
+          <div class="input-wrapper">
+            <span class="input-icon">📧</span>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="exemple@clinique.tn"
+              [class.invalid]="f['email'].invalid && f['email'].touched"
+            />
+          </div>
+          <div class="error-msg" *ngIf="f['email'].invalid && f['email'].touched">Email invalide</div>
+        </div>
+
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input
+              [type]="showPass ? 'text' : 'password'"
+              formControlName="motDePasse"
+              placeholder="••••••••"
+              [class.invalid]="f['motDePasse'].invalid && f['motDePasse'].touched"
+            />
+            <button type="button" class="toggle-pass" (click)="showPass = !showPass">
+              {{ showPass ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <div class="error-msg" *ngIf="f['motDePasse'].invalid && f['motDePasse'].touched">Minimum 6 caractères</div>
+        </div>
+
+        <button type="submit" class="btn-login" [disabled]="loading">
+          <span *ngIf="!loading"> Se connecter</span>
+          <span *ngIf="loading">⏳ Connexion...</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-icon">🏥</span>
+    <div>
+      <h2>MediCare</h2>
+      <small>Gestion Médicale</small>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.path"
+      routerLinkActive="active"
+      class="nav-item"
+    >
+      <span class="nav-icon">{{ item.icon }}</span>
+      <span class="nav-label">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info" *ngIf="authService.getUser() as user">
+      <div class="user-avatar">{{ user.nom.charAt(0).toUpperCase() }}</div>
+      <div>
+        <div class="user-name">{{ user.nom }}</div>
+        <div class="user-role">{{ user.role }}</div>
+      </div>
+    </div>
+  </div>
+</aside>

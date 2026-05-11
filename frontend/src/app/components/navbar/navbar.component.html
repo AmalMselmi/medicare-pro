@@ -1,0 +1,20 @@
+<header class="navbar">
+  <div class="navbar-left">
+    <div class="date-info">
+      <span class="date-icon"></span>
+      <span>{{ today | date:'dd/MM/yyyy' }}</span>
+    </div>
+  </div>
+  <div class="navbar-right">
+    <div class="user-chip" *ngIf="user">
+      <div class="user-avatar-sm">{{ user.nom.charAt(0).toUpperCase() }}</div>
+      <div>
+        <span class="user-name">{{ user.nom }}</span>
+        <span class="user-badge">{{ user.role }}</span>
+      </div>
+    </div>
+    <button class="btn-logout" (click)="logout()">
+      <span></span> Déconnecter
+    </button>
+  </div>
+</header>

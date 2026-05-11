@@ -1,0 +1,96 @@
+<div class="rdv-form-page fade-in">
+  <div class="page-header">
+    <div>
+      <h1>{{ isEdit ? ' Modifier le Rendez-vous' : ' Nouveau Rendez-vous' }}</h1>
+      <p class="subtitle">{{ isEdit ? 'Modifier les détails du rendez-vous' : 'Planifier un nouveau rendez-vous' }}</p>
+    </div>
+    <a routerLink="/rendezvous" class="btn btn-outline">← Retour</a>
+  </div>
+
+  <div class="form-card card">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form-section">
+        <h3> Patient & Médecin</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Patient *</label>
+            <select formControlName="patient" [class.invalid]="f['patient'].invalid && f['patient'].touched">
+              <option value="">Sélectionner un patient...</option>
+              <option *ngFor="let p of patients" [value]="p._id">{{ p.prenom }} {{ p.nom }} — {{ p.telephone }}</option>
+            </select>
+            <div class="error-msg" *ngIf="f['patient'].invalid && f['patient'].touched">Patient requis</div>
+          </div>
+          <div class="form-group">
+            <label>Médecin *</label>
+            <select formControlName="medecin" [class.invalid]="f['medecin'].invalid && f['medecin'].touched">
+              <option value="">Sélectionner un médecin...</option>
+              <option *ngFor="let m of medecins" [value]="m._id">Dr. {{ m.prenom }} {{ m.nom }} — {{ m.specialite }}</option>
+            </select>
+            <div class="error-msg" *ngIf="f['medecin'].invalid && f['medecin'].touched">Médecin requis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3> Date & Heure</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date *</label>
+            <input type="date" formControlName="date"
+              [min]="todayStr"
+              [class.invalid]="f['date'].invalid && f['date'].touched" />
+            <div class="error-msg" *ngIf="f['date'].invalid && f['date'].touched">Date requise</div>
+          </div>
+          <div class="form-group">
+            <label>Heure *</label>
+            <select formControlName="heure" [class.invalid]="f['heure'].invalid && f['heure'].touched">
+              <option value="">Sélectionner l'heure...</option>
+              <option *ngFor="let h of heures" [value]="h">{{ h }}</option>
+            </select>
+            <div class="error-msg" *ngIf="f['heure'].invalid && f['heure'].touched">Heure requise</div>
+          </div>
+          <div class="form-group">
+            <label>Durée (min)</label>
+            <select formControlName="duree">
+              <option [value]="15">15 min</option>
+              <option [value]="30">30 min</option>
+              <option [value]="45">45 min</option>
+              <option [value]="60">1 heure</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3> Détails</h3>
+        <div class="form-group">
+          <label>Motif *</label>
+          <input formControlName="motif" placeholder="Ex: Consultation générale, contrôle tension..."
+            [class.invalid]="f['motif'].invalid && f['motif'].touched" />
+          <div class="error-msg" *ngIf="f['motif'].invalid && f['motif'].touched">Motif requis (min. 3 caractères)</div>
+        </div>
+
+        <div class="form-row" *ngIf="isEdit">
+          <div class="form-group">
+            <label>Statut</label>
+            <select formControlName="statut">
+              <option *ngFor="let s of statuts" [value]="s">{{ s | titlecase }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea formControlName="notes" rows="3" placeholder="Informations complémentaires..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <a routerLink="/rendezvous" class="btn btn-outline">Annuler</a>
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          {{ loading ? '⏳ Enregistrement...' : (isEdit ? ' Mettre à jour' : ' Confirmer le RDV') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
