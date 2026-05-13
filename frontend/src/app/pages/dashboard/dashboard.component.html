@@ -9,6 +9,21 @@
       <a routerLink="/patients/new" class="btn btn-outline"> Nouveau Patient</a>
     </div>
   </div>
+<!-- Widget Météo -->
+<div class="weather-widget" *ngIf="!weatherLoading && weather">
+  <img [src]="getWeatherIconUrl(weather.icon)" [alt]="weather.description" class="weather-icon"/>
+  <div class="weather-temp">{{ weather.temperature }}°C</div>
+  <div class="weather-details">
+    <span>💧 {{ weather.humidity }}%</span>
+    <span>💨 {{ weather.wind_speed }} m/s</span>
+    <span>🌡️ Ressenti {{ weather.feels_like }}°C</span>
+  </div>
+  <div class="weather-desc">{{ weather.description }}</div>
+  <div class="weather-city">📍 {{ weather.city }}, {{ weather.country }}</div>
+</div>
+<div class="weather-loading" *ngIf="weatherLoading">
+  <p>Chargement météo...</p>
+</div>
 
   <div class="stats-grid" *ngIf="!loading">
     <div class="stat-card stat-blue">
@@ -18,6 +33,7 @@
         <div class="stat-label">RDV Aujourd'hui</div>
       </div>
     </div>
+
     <div class="stat-card stat-green">
       <div class="stat-icon"></div>
       <div class="stat-info">
@@ -40,7 +56,12 @@
       </div>
     </div>
   </div>
-
+    <!-- Source API Python FastAPI -->
+<div style="background:#f0f9ff; border:1px solid #0ea5e9; border-radius:8px; padding:12px; margin-top:16px; font-size:13px;">
+  <span style="color:#0ea5e9; font-weight:bold;">🐍 Stats fournies par Python FastAPI</span>
+  <span style="margin-left:16px;">📍 Source : http://localhost:8000/api/stats</span>
+  <span style="margin-left:16px; color:green;">● API connectée</span>
+</div>
   <div class="loading-container" *ngIf="loading">
     <div class="spinner"></div>
   </div>

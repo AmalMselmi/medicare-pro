@@ -21,9 +21,6 @@ services:
     networks:
       - medicare_network
 
-    # ✅ FIX IMPORTANT : healthcheck supprimé (cause d'erreur chez toi)
-    # Mongo est stable sans ça dans ton cas
-
   # =========================
   # 🔵 BACKEND NODEJS
   # =========================
@@ -55,6 +52,29 @@ services:
       - medicare_network
 
   # =========================
+  # 🐍 BACKEND PYTHON FASTAPI
+  # =========================
+  python-api:
+    build:
+      context: ./python-api
+      dockerfile: Dockerfile
+
+    container_name: medicare_python
+    restart: unless-stopped
+
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/medical_db
+
+    ports:
+      - "8000:8000"
+
+    depends_on:
+      - mongodb
+
+    networks:
+      - medicare_network
+
+  # =========================
   # 🟣 FRONTEND ANGULAR + NGINX
   # =========================
   frontend:
@@ -70,9 +90,9 @@ services:
 
     depends_on:
       - backend
+      - python-api
 
     volumes:
-      # ✅ FIX IMPORTANT : chemin correct (pas ../)
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
     networks:
